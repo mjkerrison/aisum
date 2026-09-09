@@ -136,8 +136,20 @@
             var params = new URLSearchParams(new FormData(form));
             params.set('c', 'aisumMcCallback');
             var url = form.action.replace('/subscribe/post?', '/subscribe/post-json?') + '&' + params.toString();
-            var timer = setTimeout(function () { show('Hmm, that took too long. Please try again.', true); btn.disabled = false; }, 15000);
+            // Fallback: some browsers (Firefox strict tracking protection, ad blockers) block
+            // third-party requests to list-manage.com. A plain form POST is a first-party
+            // navigation and gets through, so hand over to Mailchimp's hosted page.
+            var fellBack = false;
+            function fallback() {
+                if (fellBack) return;
+                fellBack = true;
+                clearTimeout(timer);
+                window.aisumMcCallback = function () {};
+                form.submit();
+            }
+            var timer = setTimeout(fallback, 8000);
             window.aisumMcCallback = function (data) {
+                if (fellBack) return;
                 clearTimeout(timer);
                 var text = (data && data.msg || '').replace(/^\d+\s*-\s*/, '');
                 if (data && data.result === 'success') {
@@ -157,7 +169,7 @@
             };
             var script = document.createElement('script');
             script.src = url;
-            script.onerror = function () { clearTimeout(timer); show('Could not reach the signup service. Please try again.', true); btn.disabled = false; };
+            script.onerror = fallback;
             document.body.appendChild(script);
         });
         function show(text, isError) {
