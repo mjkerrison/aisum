@@ -521,3 +521,18 @@ footer {
         max-width: 300px;
     }
 }
+
+.std-subscribe-msg {
+    margin-top: 14px;
+    padding: 10px 14px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.92);
+    color: #1F2937;
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+.std-subscribe-msg.is-error {
+    background: #FEF3C7;
+    color: #92400E;
+}

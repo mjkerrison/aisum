@@ -40,6 +40,7 @@
                         <button type="submit" name="subscribe" class="btn btn-outline">Get updates</button>
                     </div>
                     <div aria-hidden="true" style="position: absolute; left: -5000px;"><input type="text" name="b_d1f02c8a936106ad288cdf2ec_2e002b7472" tabindex="-1" value=""></div>
+                    <p class="std-subscribe-msg" id="std-subscribe-msg" role="status" aria-live="polite" hidden></p>
                     <p class="std-fineprint">
                         AI Safety Australia &amp; New Zealand (AISANZ) will use this for AISUM26 updates, and we'll ask before adding you to anything else.<br>
                         Already an AISANZ subscriber? No problem: this just adds AISUM26 updates. <a href="privacy">Privacy statement</a>
@@ -121,5 +122,50 @@
             <p style="margin-top: 10px; font-size: 0.85rem;">The Unconference is run by <a href="https://www.aisafetyanz.com.au/" style="color: #9CA3AF;">AI Safety Australia &amp; New Zealand</a>, housed within Good Ancestors (ABN 23 664 195 484), a charity registered with the Australian Charities and Not-for-profits Commission.</p>
         </div>
     </footer>
+    <script>
+    // Submit the Mailchimp form in place (JSONP) so visitors stay on aisum.org.
+    // If JS is unavailable the form falls back to a normal POST to Mailchimp's hosted page.
+    (function () {
+        var form = document.getElementById('mc-embedded-subscribe-form');
+        var msg = document.getElementById('std-subscribe-msg');
+        if (!form || !msg) return;
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            var btn = form.querySelector('button[type="submit"]');
+            btn.disabled = true;
+            var params = new URLSearchParams(new FormData(form));
+            params.set('c', 'aisumMcCallback');
+            var url = form.action.replace('/subscribe/post?', '/subscribe/post-json?') + '&' + params.toString();
+            var timer = setTimeout(function () { show('Hmm, that took too long. Please try again.', true); btn.disabled = false; }, 15000);
+            window.aisumMcCallback = function (data) {
+                clearTimeout(timer);
+                var text = (data && data.msg || '').replace(/^\d+\s*-\s*/, '');
+                if (data && data.result === 'success') {
+                    var needsConfirm = /confirm/i.test(text);
+                    show(needsConfirm
+                        ? 'Almost there: check your inbox for a confirmation email.'
+                        : "You're on the list. We'll email you when there's AISUM26 news.", false);
+                    form.querySelector('.std-subscribe-row').hidden = true;
+                } else if (/already subscribed/i.test(text)) {
+                    show("Looks like you're already on the AISANZ list. Email michael.kerrison@aisafetyanz.com.au and we'll add you to AISUM26 updates.", true);
+                    btn.disabled = false;
+                } else {
+                    var tmp = document.createElement('div'); tmp.innerHTML = text;
+                    show(tmp.textContent || 'Something went wrong. Please try again.', true);
+                    btn.disabled = false;
+                }
+            };
+            var script = document.createElement('script');
+            script.src = url;
+            script.onerror = function () { clearTimeout(timer); show('Could not reach the signup service. Please try again.', true); btn.disabled = false; };
+            document.body.appendChild(script);
+        });
+        function show(text, isError) {
+            msg.textContent = text;
+            msg.classList.toggle('is-error', !!isError);
+            msg.hidden = false;
+        }
+    })();
+    </script>
 </body>
 </html>
