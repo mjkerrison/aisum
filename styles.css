@@ -454,3 +454,70 @@ footer {
         font-size: 1.6rem;
     }
 }
+
+/* Subscribe form inside the save-the-date callout */
+.std-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.25);
+    margin: 28px auto 22px;
+    max-width: 420px;
+}
+
+.std-subscribe-label {
+    display: block;
+    font-weight: 600;
+    font-size: 1.05rem;
+    margin-bottom: 12px;
+}
+
+.std-subscribe-row {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.std-subscribe-row input[type="email"] {
+    flex: 1 1 260px;
+    max-width: 340px;
+    padding: 13px 16px;
+    font: inherit;
+    font-size: 1rem;
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.95);
+    color: #1F2937;
+}
+
+.std-subscribe-row input[type="email"]:focus {
+    outline: none;
+    border-color: #FF6B35;
+    box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.35);
+}
+
+.std-subscribe-row .btn {
+    font-size: 1rem;
+    padding: 13px 24px;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.std-fineprint {
+    margin-top: 14px;
+    font-size: 0.8rem;
+    line-height: 1.5;
+    opacity: 0.8;
+}
+
+.std-fineprint a {
+    color: white;
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .std-subscribe-row input[type="email"],
+    .std-subscribe-row .btn {
+        width: 100%;
+        max-width: 300px;
+    }
+}

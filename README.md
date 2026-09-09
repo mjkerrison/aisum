@@ -7,7 +7,13 @@ Static HTML, no build step. Styling and structure inherited from [aisum25](https
 - `index.html` - landing page (currently a save-the-date placeholder for AISUM26)
 - `styles.css`, `favicon.svg` - carried over from aisum25
 - `aisum26.ics` - all-day save-the-date event served by the hero "Add to Apple / Outlook" button (Google gets a render?action=TEMPLATE link)
+- `privacy.html` - privacy statement (ported from aisum25; adds the Mailchimp updates list)
+- `thanks.html` - post-subscribe landing page; set as the Mailchimp "confirmation thank you page" URL
 - `_redirects` - `/2025` -> aisum25.com
+
+## Mailing list
+
+The hero subscribe form posts straight to the AISANZ Mailchimp audience (no Mailchimp JS) and applies the `AISUM26 EOI` tag via the hidden `tags` field. Honeypot field retained. The general AISANZ signup form on aisafetyanz.com.au applies `AISANZ general`; newsletter sends go to that tag, AISUM26 sends to this one.
 
 ## Hosting
 
