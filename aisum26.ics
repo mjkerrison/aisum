@@ -1,0 +1,18 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//AISUM//AISUM26 Save the Date//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:aisum26-save-the-date@aisum.org
+DTSTAMP:20260909T020000Z
+DTSTART;VALUE=DATE:20261127
+DTEND;VALUE=DATE:20261128
+SUMMARY:AISUM26 – AI Safety Unconference\, Melbourne
+DESCRIPTION:Save the date for AISUM26\, the AI Safety Unconference\, Melbourne. Details and applications: https://aisum.org
+LOCATION:Melbourne\, Australia
+URL:https://aisum.org
+STATUS:TENTATIVE
+TRANSP:TRANSPARENT
+END:VEVENT
+END:VCALENDAR

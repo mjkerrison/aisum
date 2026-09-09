@@ -402,3 +402,55 @@ footer {
         font-size: 1.125rem;
     }
 }
+
+/* Save-the-date callout (hero) */
+.save-the-date {
+    margin: 40px auto 0;
+    padding: 30px 30px 34px;
+    max-width: 640px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 12px;
+    backdrop-filter: blur(2px);
+}
+
+.std-label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #FFB08A;
+    margin-bottom: 8px;
+}
+
+.std-date {
+    font-size: 2rem;
+    font-weight: 800;
+    line-height: 1.2;
+}
+
+.std-detail {
+    font-size: 1.125rem;
+    opacity: 0.85;
+    margin-top: 6px;
+}
+
+.std-buttons {
+    margin-top: 24px;
+    gap: 14px;
+}
+
+.std-buttons .btn {
+    font-size: 1rem;
+    padding: 13px 24px;
+}
+
+@media (max-width: 768px) {
+    .save-the-date {
+        padding: 24px 18px 26px;
+    }
+
+    .std-date {
+        font-size: 1.6rem;
+    }
+}
