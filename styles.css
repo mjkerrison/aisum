@@ -536,3 +536,7 @@ footer {
     background: #FEF3C7;
     color: #92400E;
 }
+
+.std-subscribe-row[hidden] {
+    display: none;
+}
