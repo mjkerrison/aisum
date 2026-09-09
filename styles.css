@@ -1,0 +1,404 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+    color: #1F2937;
+    background: #f8f9fa;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Fix for list indentation after reset */
+ul, ol {
+    margin-left: 20px;
+    margin-bottom: 15px;
+}
+
+ul li {
+    margin-bottom: 8px;
+}
+
+.hero {
+    background: linear-gradient(135deg, #1E40AF 0%, #1e3a8a 100%);
+    color: white;
+    padding: 80px 20px;
+    text-align: center;
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hero-content {
+    max-width: 800px;
+}
+
+.icon-logo {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 30px;
+}
+
+.icon-logo svg {
+    width: 100%;
+    height: 100%;
+    fill: white;
+}
+
+h1 {
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 20px;
+}
+
+.tagline {
+    font-size: 1.25rem;
+    margin-bottom: 10px;
+    opacity: 0.9;
+}
+
+.event-details {
+    font-size: 1.125rem;
+    margin-bottom: 40px;
+    opacity: 0.8;
+}
+
+.cta-buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 40px;
+}
+
+.btn {
+    padding: 15px 30px;
+    border-radius: 6px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s;
+    border: 2px solid transparent;
+    font-size: 1.1rem;
+}
+
+.btn-primary {
+    background: #FF6B35;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #e55a2b;
+    transform: translateY(-2px);
+}
+
+.btn-outline {
+    background: transparent;
+    color: white;
+    border-color: white;
+}
+
+.btn-outline:hover {
+    background: white;
+    color: #1E40AF;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.section {
+    padding: 80px 0;
+}
+
+.section-white {
+    background: white;
+}
+
+h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #1E40AF;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.section-description {
+    font-size: 1.125rem;
+    text-align: center;
+    color: #6B7280;
+    margin-bottom: 50px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 40px;
+    margin-top: 60px;
+}
+
+.feature-card {
+    background: white;
+    padding: 40px 30px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    transition: transform 0.3s;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+}
+
+.feature-icon {
+    width: 60px;
+    height: 60px;
+    background: #1E40AF;
+    border-radius: 50%;
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.feature-icon.accent {
+    background: #FF6B35;
+}
+
+h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1F2937;
+    margin-bottom: 15px;
+}
+
+.feature-description {
+    color: #6B7280;
+    line-height: 1.7;
+}
+
+.schedule-preview {
+    background: #f8f9fa;
+    padding: 40px;
+    border-radius: 12px;
+    margin-top: 40px;
+}
+
+.schedule-item {
+    display: flex;
+    align-items: center;
+    padding: 20px 0;
+    border-bottom: 1px solid #E5E7EB;
+}
+
+.schedule-item:last-child {
+    border-bottom: none;
+}
+
+.schedule-time {
+    font-weight: 600;
+    color: #1E40AF;
+    min-width: 120px;
+}
+
+.schedule-content {
+    flex: 1;
+}
+
+.schedule-title {
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.schedule-description {
+    color: #6B7280;
+    font-size: 0.9rem;
+}
+
+.contact-section {
+    background: #1F2937;
+    color: white;
+    text-align: center;
+}
+
+.contact-section h2 {
+    color: white;
+}
+
+.contact-links {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 30px;
+    flex-wrap: wrap;
+}
+
+.contact-link {
+    color: #FF6B35;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s;
+}
+
+.contact-link:hover {
+    color: white;
+}
+
+footer {
+    background: #1F2937;
+    color: #9CA3AF;
+    text-align: center;
+    padding: 20px;
+    border-top: 1px solid #374151;
+    margin-top: auto;
+}
+
+/* FAQ-specific styles */
+.header {
+    background: linear-gradient(135deg, #1E40AF 0%, #1e3a8a 100%);
+    color: white;
+    padding: 60px 20px;
+    text-align: center;
+}
+
+.header h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.header p {
+    font-size: 1.125rem;
+    opacity: 0.9;
+}
+
+.back-link {
+    display: inline-block;
+    margin-bottom: 20px;
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.back-link:hover {
+    color: white;
+}
+
+.faqs-content {
+    background: white;
+    margin: -40px auto 80px;
+    padding: 60px 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    max-width: 800px;
+}
+
+.faq-item {
+    margin-bottom: 30px;
+    border-bottom: 1px solid #E5E7EB;
+    padding-bottom: 30px;
+}
+
+.faq-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.faq-question {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1E40AF;
+    margin-bottom: 15px;
+}
+
+.faq-answer {
+    color: #374151;
+    line-height: 1.7;
+}
+
+.faq-answer p {
+    margin-bottom: 15px;
+}
+
+.faq-answer p:last-child {
+    margin-bottom: 0;
+}
+
+.placeholder-notice {
+    background: #FEF3C7;
+    border: 1px solid #F59E0B;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.placeholder-notice h3 {
+    color: #92400E;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.placeholder-notice p {
+    color: #92400E;
+}
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2rem;
+    }
+
+    .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .btn {
+        width: 100%;
+        max-width: 300px;
+    }
+
+    h2 {
+        font-size: 2rem;
+    }
+
+    .schedule-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .contact-links {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .header h1 {
+        font-size: 2rem;
+    }
+
+    .faqs-content {
+        margin: -20px 20px 60px;
+        padding: 40px 30px;
+    }
+
+    .faq-question {
+        font-size: 1.125rem;
+    }
+}
