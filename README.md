@@ -8,7 +8,7 @@ Static HTML, no build step. Styling and structure inherited from [aisum25](https
 - `styles.css`, `favicon.svg` - carried over from aisum25
 - `aisum26.ics` - all-day save-the-date event served by the hero "Add to Apple / Outlook" button (Google gets a render?action=TEMPLATE link)
 - `privacy.html` - privacy statement (ported from aisum25; adds the Mailchimp updates list)
-- `thanks.html` - post-subscribe landing page; set as the Mailchimp "confirmation thank you page" URL
+- `thanks.html` - post-subscribe landing page; set https://aisum.org/thanks as the Mailchimp "confirmation thank you page" URL (the Worker serves clean URLs and 307s the `.html` form)
 - `_redirects` - `/2025` -> aisum25.com
 
 ## Mailing list
