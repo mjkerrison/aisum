@@ -30,7 +30,8 @@
                 </div>
             </noscript>
 
-            <form id="apply-form" class="apply-form" novalidate hidden>
+            <!-- data-turnstile-sitekey: the Cloudflare Turnstile widget's public site key -->
+            <form id="apply-form" class="apply-form" novalidate hidden data-turnstile-sitekey="1x00000000000000000000AA">
 
                 <ol class="apply-steps" aria-label="Progress">
                     <li class="apply-step is-current" data-step-marker="you"><span class="apply-step-dot">1</span>About you</li>
@@ -47,6 +48,7 @@
                     <h2 class="apply-panel-title" id="panel-you-title" tabindex="-1">About you</h2>
                     <p class="apply-lede">
                         This is an application, not a registration. If you're accepted, you'll still need to register and buy a ticket.
+                        There's more on how it works in the <a href="faqs" target="_blank">FAQs</a>.
                     </p>
 
                     <div class="apply-field" data-field="name">
@@ -138,6 +140,16 @@
                         <p class="apply-error" id="err-presence" role="alert" hidden></p>
                     </div>
 
+                    <div class="apply-field" data-field="volunteer">
+                        <label class="apply-check">
+                            <input type="checkbox" id="f-volunteer" name="volunteer" value="yes">
+                            <span>
+                                <strong>I'd be up for volunteering on the day</strong>
+                                <span class="apply-check-help">Things like set-up, the welcome desk or keeping sessions to time. We'll be in touch with details.</span>
+                            </span>
+                        </label>
+                    </div>
+
                     <div class="apply-field" data-field="anything_else">
                         <label for="f-anything">Anything else you would like us to know in support of your application? <span class="apply-optional">(optional)</span></label>
                         <textarea id="f-anything" name="anything_else" rows="3" maxlength="3000"></textarea>
@@ -146,8 +158,8 @@
                     <!-- Honeypot: humans never see or fill this -->
                     <div aria-hidden="true" class="apply-hp"><label>Leave this empty <input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
 
-                    <!-- Cloudflare Turnstile widget mounts here once the endpoint is live -->
-                    <div id="apply-turnstile"></div>
+                    <!-- Cloudflare Turnstile widget mounts here -->
+                    <div id="apply-turnstile" class="apply-turnstile"></div>
 
                     <p class="apply-submit-error" id="apply-submit-error" role="alert" hidden></p>
 
@@ -158,7 +170,7 @@
                 </section>
 
                 <p class="apply-fineprint">
-                    Questions? Email <a href="mailto:michael.kerrison@aisafetyanz.com.au?subject=AISUM26%20application">michael.kerrison@aisafetyanz.com.au</a>.
+                    Questions? Check the <a href="faqs" target="_blank">FAQs</a> or email <a href="mailto:michael.kerrison@aisafetyanz.com.au?subject=AISUM26%20application">michael.kerrison@aisafetyanz.com.au</a>.
                     We use your answers to assess applications and contact you about the outcome: <a href="privacy">privacy statement</a>.
                 </p>
             </form>
@@ -215,6 +227,7 @@
             <p style="margin-top: 10px; font-size: 0.85rem;">The Unconference is run by <a href="https://www.aisafetyanz.com.au/" style="color: #9CA3AF;">AI Safety Australia &amp; New Zealand</a>, housed within Good Ancestors (ABN 23 664 195 484), a charity registered with the Australian Charities and Not-for-profits Commission.</p>
         </div>
     </footer>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
     <script src="apply.js"></script>
 </body>
 </html>

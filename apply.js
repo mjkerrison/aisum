@@ -1,12 +1,14 @@
 // AISUM26 application form.
 // Two steps (About you -> About the Unconference). An engagement answer of 1 short-circuits
-// to a soft-landing panel instead of step 2. Answers are kept in localStorage until the
-// application is submitted, so a refresh or a failed submit never loses them.
+// to a soft-landing panel instead of step 2, and nothing is sent for those visitors.
+// Answers are kept in localStorage until the application is submitted, so a refresh or a
+// failed submit never loses them. The Worker at /api/apply re-validates everything.
 (function () {
     var ENDPOINT = '/api/apply';
     var DRAFT_KEY = 'aisum26-apply-draft';
     var WORD_GUIDE = 200;
-    var FIELDS = ['name', 'email', 'engagement', 'hoping', 'presence', 'anything_else'];
+    var FIELDS = ['name', 'email', 'engagement', 'hoping', 'presence', 'volunteer', 'anything_else'];
+    var EMAIL_FALLBACK = 'If it keeps happening, email <a href="mailto:michael.kerrison@aisafetyanz.com.au?subject=AISUM26%20application">michael.kerrison@aisafetyanz.com.au</a>.';
     var STEP_FIELDS = {
         you: ['name', 'email', 'engagement'],
         unconference: ['hoping', 'presence']
@@ -20,8 +22,9 @@
     var submitError = document.getElementById('apply-submit-error');
     var draftNote = document.getElementById('apply-draft-note');
     var counter = document.getElementById('count-hoping');
-    var submissionId = newId();
-    var softSent = false;
+    var turnstileBox = document.getElementById('apply-turnstile');
+    var sitekey = form.getAttribute('data-turnstile-sitekey');
+    var turnstileId = null;
 
     form.hidden = false;
 
@@ -32,6 +35,7 @@
             var checked = form.querySelector('input[name="engagement"]:checked');
             return checked ? checked.value : '';
         }
+        if (name === 'volunteer') return form.elements.volunteer.checked;
         return (form.elements[name].value || '').trim();
     }
 
@@ -44,11 +48,6 @@
     function wordCount(text) {
         var words = text.trim().match(/\S+/g);
         return words ? words.length : 0;
-    }
-
-    function newId() {
-        if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
-        return 'id-' + Date.now() + '-' + Math.random().toString(16).slice(2);
     }
 
     // ---- validation ----
@@ -145,6 +144,7 @@
         } else {
             title = (view === 'soft' ? soft : done).querySelector('.apply-panel-title');
         }
+        if (view === 'unconference') mountTurnstile();
         if (opts.push) history.pushState({ view: view }, '');
         if (opts.focus !== false && title) {
             title.focus({ preventScroll: true });
@@ -166,7 +166,6 @@
             if (!validateStep('you')) return;
             if (value('engagement') === '1') {
                 show('soft', { push: true });
-                sendSoftLanding();
             } else {
                 show('unconference', { push: true });
             }
@@ -194,7 +193,7 @@
 
     function saveDraft() {
         try {
-            localStorage.setItem(DRAFT_KEY, JSON.stringify({ id: submissionId, values: values() }));
+            localStorage.setItem(DRAFT_KEY, JSON.stringify({ values: values() }));
         } catch (e) { /* storage unavailable: carry on without drafts */ }
     }
 
@@ -214,24 +213,42 @@
             if (name === 'engagement') {
                 var radio = form.querySelector('input[name="engagement"][value="' + String(v).replace(/"/g, '') + '"]');
                 if (radio) radio.checked = true;
+            } else if (name === 'volunteer') {
+                form.elements.volunteer.checked = true;
             } else {
                 form.elements[name].value = v;
             }
         });
-        if (draft.id) submissionId = draft.id;
         if (any) draftNote.hidden = false;
     }
 
     document.getElementById('apply-clear-draft').addEventListener('click', function () {
         clearDraft();
         form.reset();
-        submissionId = newId();
-        softSent = false;
         FIELDS.forEach(function (name) { setError(name, ''); });
         updateCount();
         draftNote.hidden = true;
         show('you');
     });
+
+    // ---- Turnstile ----
+
+    // Rendered when step 2 first shows, so the token is fresh by the time of submit.
+    function mountTurnstile() {
+        if (!sitekey || turnstileId !== null || !window.turnstile) return;
+        turnstileId = window.turnstile.render(turnstileBox, { sitekey: sitekey, theme: 'light' });
+    }
+
+    function turnstileToken() {
+        mountTurnstile();
+        if (turnstileId === null) return '';
+        return window.turnstile.getResponse(turnstileId) || '';
+    }
+
+    // Tokens are single-use: get a new one after any attempt that reached the server.
+    function resetTurnstile() {
+        if (turnstileId !== null) window.turnstile.reset(turnstileId);
+    }
 
     // ---- submit ----
 
@@ -247,19 +264,11 @@
         });
     }
 
-    function payload(stage) {
+    function payload(token) {
         var v = values();
-        v.stage = stage;
-        v.submission_id = submissionId;
         v.website = form.elements.website.value;
+        v.turnstile_token = token;
         return v;
-    }
-
-    // Engagement = 1: note the interest in the background. Nothing on screen depends on it.
-    function sendSoftLanding() {
-        if (softSent) return;
-        softSent = true;
-        post(payload('soft_landing')).catch(function () { softSent = false; });
     }
 
     function showSubmitError(html) {
@@ -274,11 +283,22 @@
         if (!validateStep('you')) { show('you', { focus: false }); validateStep('you'); return; }
         if (!validateStep('unconference')) return;
 
+        var token = '';
+        if (sitekey) {
+            token = turnstileToken();
+            if (!token) {
+                showSubmitError(window.turnstile
+                    ? "We're still checking you're not a robot. Give it a moment (or tick the box above) and submit again."
+                    : "The spam check couldn't load, which can happen with strict tracking protection. " + EMAIL_FALLBACK);
+                return;
+            }
+        }
+
         submitBtn.disabled = true;
         var label = submitBtn.textContent;
         submitBtn.textContent = 'Submitting…';
 
-        post(payload('application')).then(function (res) {
+        post(payload(token)).then(function (res) {
             if (res.ok) {
                 document.getElementById('apply-done-name').textContent = value('name').split(/\s+/)[0];
                 document.getElementById('apply-done-email').textContent = value('email');
@@ -295,14 +315,16 @@
                     if (!first) first = name;
                 });
                 if (first && STEP_FIELDS.you.indexOf(first) !== -1) show('you');
+                resetTurnstile();
                 showSubmitError('Some answers need another look. Please check the highlighted fields.');
                 return;
             }
             throw new Error('submit failed: ' + res.status);
         }).catch(function () {
+            resetTurnstile();
             showSubmitError(
                 "Sorry, that didn't go through. Your answers are saved on this device, so please try again in a minute. " +
-                'If it keeps happening, email <a href="mailto:michael.kerrison@aisafetyanz.com.au?subject=AISUM26%20application">michael.kerrison@aisafetyanz.com.au</a>.'
+                EMAIL_FALLBACK
             );
         }).then(function () {
             submitBtn.disabled = false;

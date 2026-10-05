@@ -200,6 +200,57 @@
     color: #B45309;
 }
 
+/* Checkbox row */
+.apply-check {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 14px 16px;
+    border: 2px solid #E5E7EB;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+}
+
+.apply-check:hover {
+    border-color: #93A5E0;
+}
+
+.apply-check:has(input:checked) {
+    border-color: #1E40AF;
+    background: #EFF6FF;
+}
+
+.apply-check input {
+    flex: none;
+    width: 20px;
+    height: 20px;
+    margin-top: 3px;
+    accent-color: #1E40AF;
+    cursor: pointer;
+}
+
+.apply-check strong {
+    display: block;
+    font-weight: 600;
+    color: #1F2937;
+}
+
+.apply-check-help {
+    display: block;
+    color: #6B7280;
+    font-size: 0.92rem;
+    margin-top: 2px;
+}
+
+.apply-turnstile {
+    margin-top: 26px;
+}
+
+.apply-turnstile:empty {
+    margin-top: 0;
+}
+
 /* "What's an unconference?" explainer */
 .apply-explainer {
     margin-bottom: 12px;
@@ -363,6 +414,7 @@
     color: #6B7280;
 }
 
+.apply-lede a,
 .apply-fineprint a,
 .apply-outcome a:not(.btn) {
     color: #1E40AF;
