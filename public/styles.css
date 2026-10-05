@@ -445,6 +445,22 @@ footer {
     padding: 13px 24px;
 }
 
+.std-buttons .std-apply {
+    font-size: 1.15rem;
+    padding: 15px 38px;
+}
+
+.std-calendar {
+    margin-top: 14px;
+}
+
+.std-calendar .btn {
+    font-size: 0.9rem;
+    padding: 9px 18px;
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.6);
+}
+
 @media (max-width: 768px) {
     .save-the-date {
         padding: 24px 18px 26px;
