@@ -1,0 +1,492 @@
+/* Application form (/apply). Builds on the .header + .faqs-content card from styles.css. */
+
+/* body is a column flexbox and .container has auto side margins, so without an explicit
+   width the section shrink-wraps its content and a long unbreakable word (an email
+   address) can push it past the viewport on phones. */
+.apply-wrap {
+    width: 100%;
+}
+
+.apply-card {
+    max-width: 720px;
+    padding: 44px 48px 40px;
+    overflow-wrap: break-word;
+}
+
+.apply-alert {
+    background: #FEF3C7;
+    border: 1px solid #F59E0B;
+    border-radius: 8px;
+    padding: 16px 18px;
+    color: #92400E;
+}
+
+.apply-alert a {
+    color: inherit;
+    font-weight: 600;
+}
+
+/* Progress */
+.apply-steps {
+    list-style: none;
+    margin: 0 0 30px;
+    display: flex;
+    gap: 12px;
+}
+
+.apply-step {
+    flex: 1;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-top: 12px;
+    border-top: 3px solid #E5E7EB;
+    color: #9CA3AF;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: color 0.3s, border-color 0.3s;
+}
+
+.apply-step-dot {
+    flex: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #E5E7EB;
+    color: #6B7280;
+    font-size: 0.8rem;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s, color 0.3s;
+}
+
+.apply-step.is-current,
+.apply-step.is-done {
+    color: #1E40AF;
+    border-top-color: #1E40AF;
+}
+
+.apply-step.is-current .apply-step-dot,
+.apply-step.is-done .apply-step-dot {
+    background: #1E40AF;
+    color: white;
+}
+
+.apply-draft-note {
+    background: #EFF6FF;
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-bottom: 24px;
+    font-size: 0.9rem;
+    color: #1E3A8A;
+}
+
+/* Panels */
+.apply-panel,
+.apply-outcome {
+    animation: apply-in 0.28s ease-out;
+}
+
+@keyframes apply-in {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .apply-panel,
+    .apply-outcome {
+        animation: none;
+    }
+}
+
+.apply-panel-title {
+    font-size: 1.6rem;
+    text-align: left;
+    margin-bottom: 10px;
+    outline: none;
+}
+
+.apply-lede {
+    color: #4B5563;
+    margin-bottom: 28px;
+}
+
+/* Fields */
+.apply-field {
+    border: 0;
+    margin-top: 26px;
+    min-width: 0;
+}
+
+.apply-field > label,
+.apply-field > legend {
+    display: block;
+    font-weight: 600;
+    color: #1F2937;
+    margin-bottom: 6px;
+    padding: 0;
+}
+
+.apply-optional {
+    font-weight: 400;
+    color: #6B7280;
+}
+
+.apply-help {
+    color: #6B7280;
+    font-size: 0.92rem;
+    margin-bottom: 10px;
+}
+
+.apply-field input[type="text"] + .apply-help,
+.apply-field input[type="email"] + .apply-help {
+    margin: 8px 0 0;
+}
+
+.apply-field input[type="text"],
+.apply-field input[type="email"],
+.apply-field textarea {
+    display: block;
+    width: 100%;
+    padding: 12px 14px;
+    font: inherit;
+    font-size: 1rem;
+    color: #1F2937;
+    background: white;
+    border: 2px solid #D1D5DB;
+    border-radius: 8px;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.apply-field textarea {
+    resize: vertical;
+    min-height: 96px;
+    line-height: 1.55;
+}
+
+.apply-field input:focus,
+.apply-field textarea:focus {
+    outline: none;
+    border-color: #1E40AF;
+    box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.18);
+}
+
+.apply-field.has-error input[type="text"],
+.apply-field.has-error input[type="email"],
+.apply-field.has-error textarea,
+.apply-field.has-error .apply-scale-option {
+    border-color: #DC2626;
+}
+
+.apply-error {
+    color: #B91C1C;
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-top: 8px;
+}
+
+.apply-count {
+    text-align: right;
+    font-size: 0.85rem;
+    color: #6B7280;
+    margin-top: 6px;
+    font-variant-numeric: tabular-nums;
+}
+
+.apply-count.is-over {
+    color: #B45309;
+}
+
+/* "What's an unconference?" explainer */
+.apply-explainer {
+    margin-bottom: 12px;
+    border-left: 3px solid #FF6B35;
+    background: #FFF7F3;
+    border-radius: 0 8px 8px 0;
+    padding: 10px 14px;
+    font-size: 0.92rem;
+    color: #4B5563;
+}
+
+.apply-explainer summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: #C2410C;
+}
+
+.apply-explainer p {
+    margin-top: 10px;
+}
+
+/* Engagement scale */
+.apply-scale-options {
+    display: grid;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+.apply-scale-option {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 11px 14px;
+    border: 2px solid #E5E7EB;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+}
+
+.apply-scale-option:hover {
+    border-color: #93A5E0;
+}
+
+.apply-scale-option input {
+    position: absolute;
+    opacity: 0;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    cursor: pointer;
+}
+
+.apply-scale-num {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: #F3F4F6;
+    color: #374151;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s, color 0.15s;
+}
+
+.apply-scale-text {
+    color: #374151;
+    line-height: 1.35;
+}
+
+.apply-scale-option:has(input:checked) {
+    border-color: #1E40AF;
+    background: #EFF6FF;
+}
+
+.apply-scale-option:has(input:checked) .apply-scale-num {
+    background: #1E40AF;
+    color: white;
+}
+
+.apply-scale-option:has(input:checked) .apply-scale-text {
+    color: #1E3A8A;
+    font-weight: 600;
+}
+
+.apply-scale-option:has(input:focus-visible) {
+    box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.25);
+}
+
+/* Actions */
+.apply-actions {
+    margin-top: 34px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 20px;
+}
+
+.apply-actions-split {
+    justify-content: space-between;
+}
+
+.apply-btn {
+    font-family: inherit;
+    cursor: pointer;
+    font-size: 1.05rem;
+    padding: 14px 30px;
+}
+
+.apply-btn[disabled] {
+    opacity: 0.65;
+    cursor: progress;
+    transform: none;
+}
+
+.apply-linkbtn {
+    background: none;
+    border: 0;
+    padding: 0;
+    font: inherit;
+    font-weight: 600;
+    color: #1E40AF;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    white-space: nowrap;
+}
+
+.apply-linkbtn:hover {
+    color: #FF6B35;
+}
+
+.apply-submit-error {
+    margin-top: 24px;
+    background: #FEF2F2;
+    border: 1px solid #FCA5A5;
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: #991B1B;
+    font-size: 0.95rem;
+}
+
+.apply-submit-error a {
+    color: inherit;
+    font-weight: 600;
+}
+
+.apply-hp {
+    position: absolute;
+    left: -5000px;
+}
+
+.apply-fineprint {
+    margin-top: 34px;
+    padding-top: 20px;
+    border-top: 1px solid #E5E7EB;
+    font-size: 0.85rem;
+    color: #6B7280;
+}
+
+.apply-fineprint a,
+.apply-outcome a:not(.btn) {
+    color: #1E40AF;
+}
+
+/* Outcome panels (soft landing, submitted) */
+.apply-outcome p {
+    color: #374151;
+    margin-top: 14px;
+}
+
+.apply-resources {
+    list-style: none;
+    margin: 22px 0 0;
+    display: grid;
+    gap: 10px;
+}
+
+.apply-resources li {
+    margin: 0;
+    padding: 12px 16px;
+    border: 1px solid #E5E7EB;
+    border-radius: 10px;
+    display: grid;
+    gap: 2px;
+}
+
+.apply-resources a {
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.apply-resources a:hover {
+    text-decoration: underline;
+}
+
+.apply-resources span {
+    color: #6B7280;
+    font-size: 0.92rem;
+}
+
+.apply-outcome .apply-outcome-foot {
+    margin-top: 28px;
+    padding-top: 18px;
+    border-top: 1px solid #E5E7EB;
+    font-size: 0.9rem;
+    color: #6B7280;
+}
+
+.apply-done {
+    text-align: center;
+}
+
+.apply-done .apply-panel-title {
+    text-align: center;
+}
+
+.apply-done-mark {
+    width: 64px;
+    height: 64px;
+    margin: 4px auto 18px;
+    border-radius: 50%;
+    background: #1E40AF;
+    color: white;
+    font-size: 2rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.apply-next {
+    list-style: none;
+    margin: 24px auto 0;
+    max-width: 520px;
+    text-align: left;
+    display: grid;
+    gap: 10px;
+}
+
+.apply-next li {
+    margin: 0;
+    padding: 12px 16px;
+    background: #F9FAFB;
+    border-radius: 10px;
+    color: #374151;
+}
+
+.apply-done .apply-actions {
+    justify-content: center;
+}
+
+@media (max-width: 768px) {
+    .apply-card {
+        margin-left: 0;
+        margin-right: 0;
+        padding: 30px 22px 28px;
+    }
+
+    .apply-btn {
+        padding: 13px 22px;
+        white-space: nowrap;
+    }
+
+    .apply-outcome .apply-linkbtn {
+        white-space: normal;
+        text-align: left;
+    }
+
+    .apply-panel-title {
+        font-size: 1.35rem;
+    }
+
+    .apply-step {
+        font-size: 0.8rem;
+        gap: 8px;
+    }
+
+    .apply-actions .apply-btn {
+        width: auto;
+        max-width: none;
+    }
+
+    .apply-done .apply-actions .apply-btn {
+        width: 100%;
+    }
+}

@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apply to AISUM26 - The AI Safety Unconference, Melbourne</title>
+    <meta name="description" content="Apply to attend AISUM26, the AI Safety Unconference, Melbourne, on Friday 27 November 2026.">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="apply.css">
+</head>
+<body>
+    <section class="header">
+        <div class="container">
+            <a href="/" class="back-link">← Back to AISUM26</a>
+            <h1>Apply to AISUM26</h1>
+            <p>Friday 27 November 2026 &middot; All day &middot; Melbourne</p>
+        </div>
+    </section>
+
+    <section class="container apply-wrap">
+        <div class="faqs-content apply-card">
+
+            <noscript>
+                <div class="apply-alert">
+                    This form needs JavaScript. If that's a problem, email
+                    <a href="mailto:michael.kerrison@aisafetyanz.com.au?subject=AISUM26%20application">michael.kerrison@aisafetyanz.com.au</a>
+                    and we'll take your application that way.
+                </div>
+            </noscript>
+
+            <form id="apply-form" class="apply-form" novalidate hidden>
+
+                <ol class="apply-steps" aria-label="Progress">
+                    <li class="apply-step is-current" data-step-marker="you"><span class="apply-step-dot">1</span>About you</li>
+                    <li class="apply-step" data-step-marker="unconference"><span class="apply-step-dot">2</span>About the Unconference</li>
+                </ol>
+
+                <p class="apply-draft-note" id="apply-draft-note" role="status" hidden>
+                    We've restored the answers you'd started on this device.
+                    <button type="button" class="apply-linkbtn" id="apply-clear-draft">Start again</button>
+                </p>
+
+                <!-- Step 1: About you -->
+                <section class="apply-panel" data-panel="you" aria-labelledby="panel-you-title">
+                    <h2 class="apply-panel-title" id="panel-you-title" tabindex="-1">About you</h2>
+                    <p class="apply-lede">
+                        This is an application, not a registration. If you're accepted, you'll still need to register and buy a ticket.
+                    </p>
+
+                    <div class="apply-field" data-field="name">
+                        <label for="f-name">Name</label>
+                        <input type="text" id="f-name" name="name" autocomplete="name" required maxlength="120">
+                        <p class="apply-error" id="err-name" role="alert" hidden></p>
+                    </div>
+
+                    <div class="apply-field" data-field="email">
+                        <label for="f-email">Email</label>
+                        <input type="email" id="f-email" name="email" autocomplete="email" inputmode="email" required maxlength="200">
+                        <p class="apply-help">We'll send the outcome of your application here.</p>
+                        <p class="apply-error" id="err-email" role="alert" hidden></p>
+                    </div>
+
+                    <fieldset class="apply-field apply-scale" data-field="engagement">
+                        <legend>How engaged are you on AI safety?</legend>
+                        <div class="apply-scale-options">
+                            <label class="apply-scale-option">
+                                <input type="radio" name="engagement" value="1" required>
+                                <span class="apply-scale-num">1</span>
+                                <span class="apply-scale-text">Totally new</span>
+                            </label>
+                            <label class="apply-scale-option">
+                                <input type="radio" name="engagement" value="2">
+                                <span class="apply-scale-num">2</span>
+                                <span class="apply-scale-text">Interested, reading lots</span>
+                            </label>
+                            <label class="apply-scale-option">
+                                <input type="radio" name="engagement" value="3">
+                                <span class="apply-scale-num">3</span>
+                                <span class="apply-scale-text">Thinking about getting involved</span>
+                            </label>
+                            <label class="apply-scale-option">
+                                <input type="radio" name="engagement" value="4">
+                                <span class="apply-scale-num">4</span>
+                                <span class="apply-scale-text">Looking to change career, volunteering</span>
+                            </label>
+                            <label class="apply-scale-option">
+                                <input type="radio" name="engagement" value="5">
+                                <span class="apply-scale-num">5</span>
+                                <span class="apply-scale-text">Doing relevant work, contributing to projects</span>
+                            </label>
+                        </div>
+                        <p class="apply-error" id="err-engagement" role="alert" hidden></p>
+                    </fieldset>
+
+                    <div class="apply-actions">
+                        <button type="button" class="btn btn-primary apply-btn" data-action="next">Continue</button>
+                    </div>
+                </section>
+
+                <!-- Step 2: About the Unconference -->
+                <section class="apply-panel" data-panel="unconference" aria-labelledby="panel-unconf-title" hidden>
+                    <h2 class="apply-panel-title" id="panel-unconf-title" tabindex="-1">About the Unconference</h2>
+
+                    <div class="apply-field" data-field="hoping">
+                        <label for="f-hoping">What are you hoping to get out of and/or contribute to the Unconference?</label>
+                        <p class="apply-help" id="help-hoping">
+                            A really straightforward answer could be as short as 50 words, but you may go up to 200.
+                        </p>
+                        <details class="apply-explainer">
+                            <summary>What's an unconference?</summary>
+                            <p>
+                                An unconference is much like a normal conference, but most of the agenda isn't set in advance.
+                                Attendees pitch sessions they want to run or want to have someone run, everyone votes on what
+                                they'd like to go to, and then someone (in this case us, the organisers) does some constrained
+                                optimisation to build a program.
+                            </p>
+                            <p>
+                                What this means for you: you may want to think about what you might like to run, what you'd
+                                like to see others run, and how you might make the most of the opportunity to connect with
+                                others in the community.
+                            </p>
+                        </details>
+                        <textarea id="f-hoping" name="hoping" rows="7" required aria-describedby="help-hoping count-hoping"></textarea>
+                        <p class="apply-count" id="count-hoping" aria-live="polite">0 words</p>
+                        <p class="apply-error" id="err-hoping" role="alert" hidden></p>
+                    </div>
+
+                    <div class="apply-field" data-field="presence">
+                        <label for="f-presence">LinkedIn or other public presence</label>
+                        <p class="apply-help" id="help-presence">
+                            We'll look at this rather than ask you a bunch of questions about your career. You're welcome
+                            to link to a Google Doc or similar: make sure it's shared publicly or with
+                            michael.kerrison@aisafetyanz.com.au.
+                        </p>
+                        <input type="text" id="f-presence" name="presence" inputmode="url" autocomplete="url" required maxlength="500" placeholder="https://" aria-describedby="help-presence">
+                        <p class="apply-error" id="err-presence" role="alert" hidden></p>
+                    </div>
+
+                    <div class="apply-field" data-field="anything_else">
+                        <label for="f-anything">Anything else you would like us to know in support of your application? <span class="apply-optional">(optional)</span></label>
+                        <textarea id="f-anything" name="anything_else" rows="3" maxlength="3000"></textarea>
+                    </div>
+
+                    <!-- Honeypot: humans never see or fill this -->
+                    <div aria-hidden="true" class="apply-hp"><label>Leave this empty <input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+
+                    <!-- Cloudflare Turnstile widget mounts here once the endpoint is live -->
+                    <div id="apply-turnstile"></div>
+
+                    <p class="apply-submit-error" id="apply-submit-error" role="alert" hidden></p>
+
+                    <div class="apply-actions apply-actions-split">
+                        <button type="button" class="apply-linkbtn" data-action="back">← Back</button>
+                        <button type="submit" class="btn btn-primary apply-btn" id="apply-submit">Submit application</button>
+                    </div>
+                </section>
+
+                <p class="apply-fineprint">
+                    Questions? Email <a href="mailto:michael.kerrison@aisafetyanz.com.au?subject=AISUM26%20application">michael.kerrison@aisafetyanz.com.au</a>.
+                    We use your answers to assess applications and contact you about the outcome: <a href="privacy">privacy statement</a>.
+                </p>
+            </form>
+
+            <!-- Engagement = 1: soft landing -->
+            <section class="apply-outcome" id="apply-soft" aria-labelledby="apply-soft-title" hidden>
+                <h2 class="apply-panel-title" id="apply-soft-title" tabindex="-1">Thanks for your interest in the AI Safety Unconference!</h2>
+                <p>Based on your experience, we think our event won't be the best fit right now.</p>
+                <p>
+                    With limited space, we've chosen to focus on facilitating in-depth technical discussions, networking
+                    among practitioners, and collaborative problem-solving on current research agendas.
+                </p>
+                <p>
+                    This isn't a reflection on you! We want to make sure everyone, including newcomers, has a great
+                    experience, and that means matching people to the right forum.
+                </p>
+                <p>
+                    If you'd like to get started in AI safety, we'd suggest some of the following resources, and we'd
+                    be excited to see you at future events.
+                </p>
+                <ul class="apply-resources">
+                    <li><a href="https://bluedot.org/" target="_blank" rel="noopener">BlueDot Impact</a><span>Structured AI safety courses, a great place to start</span></li>
+                    <li><a href="https://80000hours.org/" target="_blank" rel="noopener">80,000 Hours</a><span>Career guides and intro content on AI safety</span></li>
+                    <li><a href="https://www.aisafety.com/" target="_blank" rel="noopener">AISafety.com</a><span>An index of even more resources</span></li>
+                    <li><a href="https://www.effectivealtruism.org/ea-global/events/eagxaustralasia-2026" target="_blank" rel="noopener">EAGxAustralasia</a><span>27–29 November in Melbourne, with some intro-level content and a great place to meet the community</span></li>
+                    <li><a href="https://www.aisafetyanz.com.au/" target="_blank" rel="noopener">AI Safety Australia &amp; New Zealand</a><span>Events and groups near you</span></li>
+                </ul>
+                <p class="apply-outcome-foot">
+                    Picked the wrong option? <button type="button" class="apply-linkbtn" id="apply-soft-back">Go back and change your answer</button>
+                </p>
+            </section>
+
+            <!-- Submitted -->
+            <section class="apply-outcome apply-done" id="apply-done" aria-labelledby="apply-done-title" hidden>
+                <div class="apply-done-mark" aria-hidden="true">✓</div>
+                <h2 class="apply-panel-title" id="apply-done-title" tabindex="-1">Application received</h2>
+                <p>Thanks, <span id="apply-done-name">friend</span>. We've got your application for AISUM26.</p>
+                <ul class="apply-next">
+                    <li>We'll email <strong id="apply-done-email">you</strong> with the outcome.</li>
+                    <li>If you're accepted, you'll get a link to register and buy a ticket. Your place isn't confirmed until then.</li>
+                    <li>In the meantime, start thinking about sessions you'd like to pitch or see.</li>
+                </ul>
+                <div class="apply-actions">
+                    <a class="btn btn-primary apply-btn" href="/">Back to AISUM26</a>
+                </div>
+            </section>
+
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 AI Safety Unconference Melbourne. Part of the global AI safety community.</p>
+            <p style="margin-top: 10px; font-size: 0.85rem;">The Unconference is run by <a href="https://www.aisafetyanz.com.au/" style="color: #9CA3AF;">AI Safety Australia &amp; New Zealand</a>, housed within Good Ancestors (ABN 23 664 195 484), a charity registered with the Australian Charities and Not-for-profits Commission.</p>
+        </div>
+    </footer>
+    <script src="apply.js"></script>
+</body>
+</html>
