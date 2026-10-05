@@ -40,10 +40,11 @@ test('valid application is written to Airtable', async () => {
     assert.equal(airtable.url, 'https://api.airtable.com/v0/appjb6j9oCogXFtNz/tblyO6Sih9ptXrod1');
     assert.equal(airtable.init.headers.Authorization, 'Bearer pat-test');
     const fields = JSON.parse(airtable.init.body).records[0].fields;
-    assert.equal(fields.Name, 'Ada Lovelace');
-    assert.equal(fields.Volunteer, true);
-    assert.equal(fields['How engaged are you on AI safety?'], '4 (e.g. looking to change career, volunteering)');
-    assert.ok(!Object.keys(fields).some(k => k.startsWith('Anything else')), 'empty optional field is omitted');
+    assert.equal(fields.fldnPNT7R58VflEa5, 'Ada Lovelace');
+    assert.equal(fields.fldKmo3Dd4NxpPhhC, true);
+    assert.equal(fields.fld6BQn8FAWILrPUq, '4 (e.g. looking to change career, volunteering)');
+    assert.ok(!('fld580MT4mqUgaQNe' in fields), 'empty optional field is omitted');
+    assert.equal(Object.keys(fields).length, 6);
     assert.ok(!JSON.stringify(fields).includes('tok'), 'token is not stored');
 });
 
@@ -72,6 +73,7 @@ test('unknown extra fields never reach Airtable', async () => {
     const r = await call({ ...GOOD, Decision: 'Accepted', Comments: 'sneaky' });
     const fields = JSON.parse(r.calls.find(c => c.url.includes('airtable')).init.body).records[0].fields;
     assert.ok(!('Decision' in fields) && !('Comments' in fields));
+    assert.equal(Object.keys(fields).length, 6);
 });
 
 test('honeypot submissions get a fake success and write nothing', async () => {

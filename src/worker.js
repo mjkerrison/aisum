@@ -9,18 +9,19 @@
 const AIRTABLE = {
     base: 'appjb6j9oCogXFtNz',
     table: 'tblyO6Sih9ptXrod1',
-    // Form field -> column in the "AISUM26 Applications" table.
+    // Form field -> column in the "AISUM26 Applications" table. Field IDs rather than
+    // names, so renaming a column in Airtable doesn't break submissions.
     fields: {
-        name: 'Name',
-        email: 'Email',
-        engagement: 'How engaged are you on AI safety?',
-        hoping: 'What are you hoping to get out of and/or contribute to the Unconference?',
-        presence: 'LinkedIn or other public presence',
-        volunteer: 'Volunteer',
-        anything_else: 'Anything else you would like us to know in support of your application?'
+        name: 'fldnPNT7R58VflEa5',          // Name
+        email: 'fldH8HfQaTubd1Gcx',         // Email
+        engagement: 'fld6BQn8FAWILrPUq',    // Engagement
+        hoping: 'fldvyBJFTQ9DZSCzv',        // Hoping to get / contribute
+        presence: 'fldeYGGygMIzo0Guf',      // Online presence
+        volunteer: 'fldKmo3Dd4NxpPhhC',     // Volunteer
+        anything_else: 'fld580MT4mqUgaQNe'  // Anything else
     },
-    // Engagement answer -> single-select option. 1 is absent on purpose: those visitors
-    // get the soft-landing message and never submit.
+    // Engagement answer -> single-select option, which must match Airtable's label exactly.
+    // 1 is absent on purpose: those visitors get the soft-landing message and never submit.
     engagement: {
         '2': '2 (e.g. interested, reading lots)',
         '3': '3 (e.g. thinking about getting involved)',
