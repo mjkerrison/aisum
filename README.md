@@ -2,14 +2,38 @@
 
 Evergreen home of **AISUM**, the AI Safety Unconference, Melbourne. Run by [AI Safety Australia & New Zealand](https://www.aisafetyanz.com.au/) as a satellite event of EAGxAustralasia.
 
-Static HTML, no build step. Styling and structure inherited from [aisum25](https://github.com/mjkerrison/aisum25) (the 2025 edition, still live at aisum25.com).
+Static HTML with no build step, plus one small Worker endpoint for the application form. Styling and structure inherited from [aisum25](https://github.com/mjkerrison/aisum25) (the 2025 edition, still live at aisum25.com).
 
-- `index.html` - landing page (currently a save-the-date placeholder for AISUM26)
-- `styles.css`, `favicon.svg` - carried over from aisum25
-- `aisum26.ics` - all-day save-the-date event served by the hero "Add to Apple / Outlook" button (Google gets a render?action=TEMPLATE link)
-- `privacy.html` - privacy statement (ported from aisum25; adds the Mailchimp updates list)
-- `thanks.html` - post-subscribe landing page; set https://aisum.org/thanks as the Mailchimp "confirmation thank you page" URL (the Worker serves clean URLs and 307s the `.html` form)
-- `_redirects` - `/2025` -> aisum25.com
+- `public/` - everything served as a static file
+  - `index.html` - landing page
+  - `apply.html`, `apply.css`, `apply.js` - the application form (`/apply`)
+  - `faqs.html` - evergreen FAQs (`/faqs`)
+  - `privacy.html` - privacy statement
+  - `thanks.html` - post-subscribe landing page; set https://aisum.org/thanks as the Mailchimp "confirmation thank you page" URL (the Worker serves clean URLs and 307s the `.html` form)
+  - `aisum26.ics` - all-day save-the-date event served by the hero "Add to Apple / Outlook" button (Google gets a render?action=TEMPLATE link)
+  - `styles.css`, `favicon.svg` - carried over from aisum25
+  - `_redirects` - `/2025` -> aisum25.com
+- `src/worker.js` - handles `POST /api/apply`; every other request falls through to `public/`
+- `wrangler.jsonc` - Worker config (name, entry point, assets directory)
+- `dev/` - local dev server and Worker tests (no dependencies, Node 22+)
+
+## Application form
+
+`/apply` is a two-step form. An engagement answer of 1 shows a "not the best fit right now" message instead of step 2, and nothing is submitted for those visitors. Otherwise the form posts JSON to `/api/apply`, where the Worker re-validates every field, verifies the Cloudflare Turnstile token, and creates a row in the Airtable applications table. The column mapping lives at the top of `src/worker.js`.
+
+Two secrets are set on the Worker in the Cloudflare dashboard (Settings -> Variables and Secrets), never in this repo:
+
+- `AIRTABLE_TOKEN` - Airtable personal access token with `data.records:write` on the base
+- `TURNSTILE_SECRET` - secret key of the Turnstile widget; its public site key is the `data-turnstile-sitekey` attribute in `apply.html`
+
+Local development:
+
+```
+node dev/serve.mjs            # http://localhost:3000, serves public/ and runs the Worker
+node --test dev/worker.test.mjs
+```
+
+Without a `.dev.vars` file the dev server logs Airtable writes instead of sending them and uses Cloudflare's always-pass Turnstile test secret (pair it with the test site key `1x00000000000000000000AA`). Put `AIRTABLE_TOKEN=...` in `.dev.vars` (gitignored) to write real rows.
 
 ## Mailing list
 
@@ -17,4 +41,4 @@ The hero subscribe form posts straight to the AISANZ Mailchimp audience (no Mail
 
 ## Hosting
 
-Cloudflare **Worker with static assets** (not a Pages project - the 2026 dashboard creates Workers by default), connected to this repo via Workers Builds. A push to `main` redeploys aisum.org in ~30s; `_redirects` and `.ics` content-type both verified working there.
+Cloudflare **Worker with static assets** (not a Pages project - the 2026 dashboard creates Workers by default), connected to this repo via Workers Builds, which runs `npx wrangler deploy` against `wrangler.jsonc`. A push to `main` redeploys aisum.org in ~30s.

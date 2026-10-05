@@ -1,0 +1,15 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  // Must match the Worker's name in the Cloudflare dashboard.
+  "name": "aisum",
+  "main": "src/worker.js",
+  "compatibility_date": "2026-09-08",
+  "observability": {
+    "enabled": true
+  },
+  // Files in ./public are served directly; anything else falls through to src/worker.js.
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS"
+  }
+}

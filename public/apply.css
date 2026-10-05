@@ -201,11 +201,14 @@
 }
 
 /* Checkbox row */
-.apply-check {
+/* label.apply-check outranks the generic ".apply-field > label" block styling */
+.apply-field > label.apply-check {
     display: flex;
     align-items: flex-start;
     gap: 14px;
+    margin-bottom: 0;
     padding: 14px 16px;
+    font-weight: 400;
     border: 2px solid #E5E7EB;
     border-radius: 10px;
     cursor: pointer;
