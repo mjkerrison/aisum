@@ -6,20 +6,20 @@ Static HTML with no build step, plus one small Worker endpoint for the applicati
 
 - `public/` - everything served as a static file
   - `index.html` - landing page
-  - `apply.html`, `apply.css`, `apply.js` - the application form (`/apply`)
+  - `apply.html`, `apply.css`, `apply.js` - the application form, served at https://apply.aisum.org/
   - `faqs.html` - evergreen FAQs (`/faqs`)
   - `privacy.html` - privacy statement
   - `thanks.html` - post-subscribe landing page; set https://aisum.org/thanks as the Mailchimp "confirmation thank you page" URL (the Worker serves clean URLs and 307s the `.html` form)
   - `aisum26.ics` - all-day save-the-date event served by the hero "Add to Apple / Outlook" button (Google gets a render?action=TEMPLATE link)
   - `styles.css`, `favicon.svg` - carried over from aisum25
   - `_redirects` - `/2025` -> aisum25.com
-- `src/worker.js` - handles `POST /api/apply`; every other request falls through to `public/`
+- `src/worker.js` - handles `POST /api/apply` and the apply-subdomain routing; every other request falls through to `public/`
 - `wrangler.jsonc` - Worker config (name, entry point, assets directory)
 - `dev/` - local dev server and Worker tests (no dependencies, Node 22+)
 
 ## Application form
 
-`/apply` is a two-step form. An engagement answer of 1 shows a "not the best fit right now" message instead of step 2, and nothing is submitted for those visitors. Otherwise the form posts JSON to `/api/apply`, where the Worker re-validates every field, verifies the Cloudflare Turnstile token, and creates a row in the Airtable applications table. The column mapping lives at the top of `src/worker.js`.
+The form is a two-step page at https://apply.aisum.org/ (see "Apply subdomain" below). An engagement answer of 1 shows a "not the best fit right now" message instead of step 2, and nothing is submitted for those visitors. Otherwise the form posts JSON to `/api/apply`, where the Worker re-validates every field, verifies the Cloudflare Turnstile token, and creates a row in the Airtable applications table. The column mapping lives at the top of `src/worker.js`.
 
 Two secrets are set on the Worker in the Cloudflare dashboard (Settings -> Variables and Secrets), never in this repo:
 
@@ -34,6 +34,16 @@ node --test dev/worker.test.mjs
 ```
 
 Without a `.dev.vars` file the dev server logs Airtable writes instead of sending them and uses Cloudflare's always-pass Turnstile test secret (pair it with the test site key `1x00000000000000000000AA`). Put `AIRTABLE_TOKEN=...` in `.dev.vars` (gitignored) to write real rows.
+
+## Apply subdomain
+
+The application form lives at **apply.aisum.org** so that it keeps working if aisum.org itself is ever pointed at a different app. Both hostnames are custom domains on the same Worker, and `src/worker.js` routes by hostname:
+
+- `apply.aisum.org/` serves `apply.html`; `/faqs` and `/privacy` work there too, so the form doesn't depend on aisum.org.
+- `aisum.org/apply` (the form's first address) redirects to `apply.aisum.org/`.
+- Any other host (workers.dev, local dev) serves the form at `/apply` in place.
+
+`/` and `/apply` are listed under `run_worker_first` in `wrangler.jsonc`, because the assets layer would otherwise answer them before the Worker could look at the hostname. `dev/serve.mjs` mirrors that list; open `http://apply.localhost:3000` to see the subdomain behaviour locally. The Turnstile widget needs no change: a widget registered for aisum.org covers its subdomains.
 
 ## Mailing list
 

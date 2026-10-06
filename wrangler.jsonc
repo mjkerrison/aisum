@@ -8,8 +8,11 @@
     "enabled": true
   },
   // Files in ./public are served directly; anything else falls through to src/worker.js.
+  // "/" and "/apply" go to the Worker first because what they serve depends on the
+  // hostname (aisum.org vs apply.aisum.org). dev/serve.mjs mirrors this list.
   "assets": {
     "directory": "./public",
-    "binding": "ASSETS"
+    "binding": "ASSETS",
+    "run_worker_first": ["/", "/apply"]
   }
 }

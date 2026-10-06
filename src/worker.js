@@ -1,6 +1,10 @@
-// aisum.org Worker. Static pages are served from ./public by the assets layer; only
-// requests that match no file get here. The one dynamic route is POST /api/apply, which
-// validates an application, checks the Turnstile token and writes a row to Airtable.
+// aisum.org Worker. Static pages are served from ./public by the assets layer; the Worker
+// only sees requests that match no file, plus the paths listed under run_worker_first in
+// wrangler.jsonc ("/" and "/apply"). It does two things:
+//   - POST /api/apply validates an application, checks the Turnstile token and writes a
+//     row to Airtable.
+//   - Host routing: the application form lives at apply.aisum.org, so that it keeps
+//     working if aisum.org itself is ever pointed at something else.
 //
 // Secrets (set in the Cloudflare dashboard, never in this repo):
 //   AIRTABLE_TOKEN    Airtable personal access token with data.records:write on the base
@@ -30,6 +34,9 @@ const AIRTABLE = {
     }
 };
 
+const SITE_HOST = 'aisum.org';
+const APPLY_HOST = 'apply.aisum.org';
+
 const LIMITS = { name: 120, email: 200, hoping: 5000, presence: 500, anything_else: 3000 };
 const MAX_BODY_BYTES = 32 * 1024;
 
@@ -37,6 +44,18 @@ export default {
     async fetch(request, env) {
         const url = new URL(request.url);
         if (url.pathname === '/api/apply') return apply(request, url, env);
+
+        // On the apply subdomain the form is the home page. Matching on the "apply."
+        // prefix rather than APPLY_HOST lets apply.localhost exercise this in local dev.
+        if (url.hostname.startsWith('apply.')) {
+            if (url.pathname === '/') return env.ASSETS.fetch(new Request(new URL('/apply', url), request));
+            if (url.pathname === '/apply') return Response.redirect(new URL('/' + url.search, url).href, 302);
+        }
+        // The form's old address. Other hosts (workers.dev previews, local dev) have no
+        // apply subdomain to forward to, so they keep serving the form at /apply.
+        if (url.hostname === SITE_HOST && url.pathname === '/apply') {
+            return Response.redirect(`https://${APPLY_HOST}/${url.search}`, 302);
+        }
         return env.ASSETS.fetch(request);
     }
 };

@@ -117,3 +117,51 @@ test('other paths fall through to static assets', async () => {
     assert.equal(res.status, 404);
     assert.equal(await res.text(), 'asset');
 });
+
+// Asset layer stand-in that echoes the path it was asked for.
+const echoEnv = { ...env, ASSETS: { fetch: request => new Response(new URL(request.url).pathname) } };
+
+test('apply subdomain serves the form at its root', async () => {
+    const res = await worker.fetch(new Request('https://apply.aisum.org/'), echoEnv);
+    assert.equal(res.status, 200);
+    assert.equal(await res.text(), '/apply');
+
+    const dupe = await worker.fetch(new Request('https://apply.aisum.org/apply'), echoEnv);
+    assert.equal(dupe.status, 302);
+    assert.equal(dupe.headers.get('Location'), 'https://apply.aisum.org/');
+
+    const faqs = await worker.fetch(new Request('https://apply.aisum.org/faqs'), echoEnv);
+    assert.equal(await faqs.text(), '/faqs');
+});
+
+test('aisum.org/apply forwards to the subdomain; the home page is untouched', async () => {
+    const res = await worker.fetch(new Request('https://aisum.org/apply?ref=x'), echoEnv);
+    assert.equal(res.status, 302);
+    assert.equal(res.headers.get('Location'), 'https://apply.aisum.org/?ref=x');
+
+    const home = await worker.fetch(new Request('https://aisum.org/'), echoEnv);
+    assert.equal(await home.text(), '/');
+});
+
+test('hosts with no apply subdomain keep serving the form at /apply', async () => {
+    const res = await worker.fetch(new Request('https://aisum.example.workers.dev/apply'), echoEnv);
+    assert.equal(res.status, 200);
+    assert.equal(await res.text(), '/apply');
+});
+
+test('applications posted from the subdomain are accepted', async () => {
+    const realFetch = globalThis.fetch;
+    globalThis.fetch = async url => String(url).includes('turnstile')
+        ? Response.json({ success: true })
+        : new Response('{"records":[{"id":"rec1"}]}');
+    try {
+        const res = await worker.fetch(new Request('https://apply.aisum.org/api/apply', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', Origin: 'https://apply.aisum.org' },
+            body: JSON.stringify(GOOD)
+        }), env);
+        assert.equal(res.status, 200);
+    } finally {
+        globalThis.fetch = realFetch;
+    }
+});
