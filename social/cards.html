@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AISUM26 social cards</title>
+<!--
+  Source for the AISUM26 social cards. One page, picked apart by query string:
+    cards.html?card=announce|theme&size=landscape|square|story
+  social/render.mjs screenshots every combination into social/out/. Edit the copy here,
+  re-run the script, and the images follow.
+-->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 100%; height: 100%; overflow: hidden; }
+body { font-family: 'Inter', -apple-system, 'Segoe UI', sans-serif; -webkit-font-smoothing: antialiased; }
+
+/* u = one design unit. Every size below is a multiple of it, so each format only has
+   to set u and its padding to rescale the whole card. */
+.card { --u: 10px; position: relative; width: 100vw; height: 100vh; overflow: hidden;
+        display: flex; flex-direction: column; justify-content: space-between; }
+.landscape { --u: 10px;   padding: 56px 64px; }
+.square    { --u: 12.6px; padding: 84px 80px; }
+.story     { --u: 14.4px; padding: 260px 84px 280px; }
+
+.card > [data-card] { display: none; }
+.announce [data-card~="announce"], .theme [data-card~="theme"] { display: flex; }
+
+/* Shared pieces */
+.lockup { display: flex; align-items: center; gap: calc(var(--u) * 1.4);
+          font-size: calc(var(--u) * 3.2); font-weight: 700; letter-spacing: -0.01em; }
+.lockup svg { width: calc(var(--u) * 5.2); height: calc(var(--u) * 5.2); flex: none; }
+.lockup .unconf { color: #FF6B35; }
+.watermark { position: absolute; pointer-events: none; }
+.footer { display: flex; align-items: flex-end; justify-content: space-between; gap: calc(var(--u) * 3); }
+.runby { display: flex; flex-direction: column; align-items: flex-end; gap: calc(var(--u) * 0.8);
+         font-size: calc(var(--u) * 1.5); font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; }
+.runby img { height: calc(var(--u) * 3.6); display: block; }
+.block { flex-direction: column; }
+
+/* Announce: blue, event details */
+.announce { background: linear-gradient(135deg, #1E40AF 0%, #1e3a8a 100%); color: #fff; }
+.announce .lockup svg { fill: #fff; }
+.announce .watermark { right: calc(var(--u) * -14); top: calc(var(--u) * -12);
+                       width: calc(var(--u) * 62); height: calc(var(--u) * 62); fill: #fff; opacity: 0.06; }
+.announce .name { font-size: calc(var(--u) * 10.4); font-weight: 900; letter-spacing: -0.03em; line-height: 1; }
+.announce .sub { font-size: calc(var(--u) * 3.3); font-weight: 700; margin-top: calc(var(--u) * 1.2); }
+.announce .tagline { font-size: calc(var(--u) * 2.5); line-height: 1.38; margin-top: calc(var(--u) * 2.6);
+                     max-width: calc(var(--u) * 76); opacity: 0.92; }
+.announce .tagline strong { display: block; font-weight: 700; opacity: 1; text-wrap: balance; }
+.announce .when .label { font-size: calc(var(--u) * 1.5); font-weight: 700; letter-spacing: 0.14em;
+                         text-transform: uppercase; color: #FFB08A; }
+.announce .when .date { font-size: calc(var(--u) * 3.9); font-weight: 800; letter-spacing: -0.01em;
+                        margin-top: calc(var(--u) * 0.5); }
+.announce .when .where { font-size: calc(var(--u) * 2.1); opacity: 0.9; margin-top: calc(var(--u) * 0.4); }
+.announce .when .url { display: inline-block; margin-top: calc(var(--u) * 1.6); background: #FF6B35; color: #fff;
+                       font-size: calc(var(--u) * 2.3); font-weight: 700; border-radius: calc(var(--u) * 0.8);
+                       padding: calc(var(--u) * 0.9) calc(var(--u) * 2); }
+.announce .runby { color: rgba(255, 255, 255, 0.75); }
+
+/* Theme: white, the question */
+.theme { background: #fff; color: #1E3A8A; }
+.theme::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: calc(var(--u) * 1.6); background: #FF6B35; }
+.theme .lockup { color: #1E40AF; }
+.theme .lockup svg { fill: #1E40AF; }
+.theme .watermark { right: calc(var(--u) * -16); bottom: calc(var(--u) * -18);
+                    width: calc(var(--u) * 60); height: calc(var(--u) * 60); fill: #1E40AF; opacity: 0.05; }
+.theme .from { font-size: calc(var(--u) * 4.2); font-weight: 600; color: #6B7280; line-height: 1.25; text-wrap: balance; }
+.theme .to { font-size: calc(var(--u) * 7.6); font-weight: 900; color: #1E40AF; letter-spacing: -0.025em;
+             line-height: 1.08; margin-top: calc(var(--u) * 1.4); }
+.theme .to em { font-style: normal; color: #FF6B35; }
+.theme .tagline { text-wrap: balance; font-size: calc(var(--u) * 2.4); line-height: 1.4; color: #4B5563; margin-top: calc(var(--u) * 2.8);
+                  max-width: calc(var(--u) * 74); }
+.theme .details { font-size: calc(var(--u) * 2.2); color: #4B5563; line-height: 1.45; }
+.theme .details b { display: block; font-size: calc(var(--u) * 2.9); font-weight: 800; color: #1E40AF; }
+.theme .details .url { color: #FF6B35; font-weight: 700; }
+.theme .runby { color: #6B7280; }
+
+/* Format tweaks */
+br.tall { display: none; }
+.square br.tall, .story br.tall { display: inline; }
+.square.theme .to { font-size: calc(var(--u) * 9.4); }
+.square .announce-mid, .story .announce-mid { margin-top: calc(var(--u) * -2); }
+.story .footer { flex-direction: column; align-items: flex-start; gap: calc(var(--u) * 5); }
+.story .runby { align-items: flex-start; }
+.story.announce .name { font-size: calc(var(--u) * 12); }
+.story.theme .to { font-size: calc(var(--u) * 8.6); }
+/* Landscape is short: the lockup already names the event, so the subtitle goes. */
+.landscape.announce .sub { display: none; }
+.landscape.announce .name { font-size: calc(var(--u) * 9.2); }
+.landscape.announce .tagline { margin-top: calc(var(--u) * 2); }
+</style>
+</head>
+<body>
+<div class="card" id="card">
+    <svg class="watermark" viewBox="0 0 24 24"><path d="M19.902 13.161a7.876 7.876 0 0 0-3.956-8.1c0-.021.006-.04.006-.061a3.952 3.952 0 0 0-7.904 0c0 .02.006.04.006.06a7.876 7.876 0 0 0-3.956 8.101 3.946 3.946 0 1 0 4.242 5.93 7.855 7.855 0 0 0 7.32 0 3.945 3.945 0 1 0 4.242-5.93zM12 2.051A2.948 2.948 0 1 1 9.052 5 2.951 2.951 0 0 1 12 2.052zM5 19.949A2.948 2.948 0 1 1 7.948 17 2.951 2.951 0 0 1 5 19.948zm3.75-1.76A3.896 3.896 0 0 0 8.952 17a3.952 3.952 0 0 0-3.868-3.944A7.1 7.1 0 0 1 4.996 12a6.977 6.977 0 0 1 3.232-5.885 3.926 3.926 0 0 0 7.544 0A6.977 6.977 0 0 1 19.004 12a7.1 7.1 0 0 1-.088 1.056A3.952 3.952 0 0 0 15.048 17a3.896 3.896 0 0 0 .202 1.188 7.13 7.13 0 0 1-6.5 0zM19 19.948A2.948 2.948 0 1 1 21.948 17 2.951 2.951 0 0 1 19 19.948z"/></svg>
+
+    <div class="lockup">
+        <svg viewBox="0 0 24 24"><path d="M19.902 13.161a7.876 7.876 0 0 0-3.956-8.1c0-.021.006-.04.006-.061a3.952 3.952 0 0 0-7.904 0c0 .02.006.04.006.06a7.876 7.876 0 0 0-3.956 8.101 3.946 3.946 0 1 0 4.242 5.93 7.855 7.855 0 0 0 7.32 0 3.945 3.945 0 1 0 4.242-5.93zM12 2.051A2.948 2.948 0 1 1 9.052 5 2.951 2.951 0 0 1 12 2.052zM5 19.949A2.948 2.948 0 1 1 7.948 17 2.951 2.951 0 0 1 5 19.948zm3.75-1.76A3.896 3.896 0 0 0 8.952 17a3.952 3.952 0 0 0-3.868-3.944A7.1 7.1 0 0 1 4.996 12a6.977 6.977 0 0 1 3.232-5.885 3.926 3.926 0 0 0 7.544 0A6.977 6.977 0 0 1 19.004 12a7.1 7.1 0 0 1-.088 1.056A3.952 3.952 0 0 0 15.048 17a3.896 3.896 0 0 0 .202 1.188 7.13 7.13 0 0 1-6.5 0zM19 19.948A2.948 2.948 0 1 1 21.948 17 2.951 2.951 0 0 1 19 19.948z"/></svg>
+        <span>AI Safety <span class="unconf">Unconference</span></span>
+    </div>
+
+    <!-- Announce -->
+    <div class="block announce-mid" data-card="announce">
+        <div class="name">AISUM26</div>
+        <div class="sub">The AI Safety Unconference, Melbourne</div>
+        <p class="tagline">The world is paying attention to AI risk. <strong>What should those of us in or from Australia and New&nbsp;Zealand do about it?</strong></p>
+    </div>
+    <div class="footer" data-card="announce">
+        <div class="when">
+            <div class="label">Applications now open</div>
+            <div class="date">Friday 27 November 2026</div>
+            <div class="where">All day &middot; Melbourne, Australia</div>
+            <div class="url">Apply at aisum.org</div>
+        </div>
+        <div class="runby">Run by <img src="aisanz-logo-compact-light.svg" alt="AI Safety Australia &amp; New Zealand"></div>
+    </div>
+
+    <!-- Theme -->
+    <div class="block" data-card="theme">
+        <div class="from">From &ldquo;why isn&rsquo;t anyone listening?&rdquo; to</div>
+        <div class="to">&ldquo;What do we <br class="tall"><em>do</em> now?&rdquo;</div>
+        <p class="tagline">The world is paying attention to AI risk. What should those of us in or from Australia and New&nbsp;Zealand do about it?</p>
+    </div>
+    <div class="footer" data-card="theme">
+        <div class="details">
+            <b>AISUM26 &middot; Friday 27 November 2026</b>
+            The AI Safety Unconference, Melbourne<br>
+            Applications open: <span class="url">aisum.org</span>
+        </div>
+        <div class="runby">Run by <img src="aisanz-logo-compact.svg" alt="AI Safety Australia &amp; New Zealand"></div>
+    </div>
+</div>
+<script>
+    var q = new URLSearchParams(location.search);
+    document.getElementById('card').classList.add(q.get('card') || 'announce', q.get('size') || 'landscape');
+</script>
+</body>
+</html>

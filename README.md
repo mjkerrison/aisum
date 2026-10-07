@@ -16,6 +16,7 @@ Static HTML with no build step, plus one small Worker endpoint for the applicati
 - `src/worker.js` - handles `POST /api/apply` and the apply-subdomain routing; every other request falls through to `public/`
 - `wrangler.jsonc` - Worker config (name, entry point, assets directory)
 - `dev/` - local dev server and Worker tests (no dependencies, Node 22+)
+- `social/` - source for the social cards; not served (see "Social cards" below)
 
 ## Application form
 
@@ -44,6 +45,10 @@ The application form lives at **apply.aisum.org** so that it keeps working if ai
 - Any other host (workers.dev, local dev) serves the form at `/apply` in place.
 
 `/` and `/apply` are listed under `run_worker_first` in `wrangler.jsonc`, because the assets layer would otherwise answer them before the Worker could look at the hostname. `dev/serve.mjs` mirrors that list; open `http://apply.localhost:3000` to see the subdomain behaviour locally. The Turnstile widget needs no change: a widget registered for aisum.org covers its subdomains.
+
+## Social cards
+
+`social/cards.html` is the single source for the share images: two designs (`announce` with the event details, `theme` with the "what do we do now?" question) in three formats (landscape 1200x630, square 1080x1080, story 1080x1920). `node social/render.mjs` screenshots every combination into `social/out/` (gitignored) with headless Chrome, and refreshes `public/og.png`, the link-preview image referenced by the `og:image` tags on the home and apply pages. To change a date or a line of copy, edit `cards.html` and re-run the script.
 
 ## Mailing list
 
