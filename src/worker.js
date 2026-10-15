@@ -36,6 +36,11 @@ const AIRTABLE = {
 
 const SITE_HOST = 'aisum.org';
 const APPLY_HOST = 'apply.aisum.org';
+// Since the cutover to the events platform, aisum.org itself is served by the
+// platform and applications are made there. This Worker only keeps
+// apply.aisum.org alive, forwarding it so links already shared still work.
+const PLATFORM = 'https://aisum.org';
+const MOVED_PATHS = { '/': '/apply', '/apply': '/apply', '/faqs': '/faqs', '/privacy': '/privacy' };
 
 const LIMITS = { name: 120, email: 200, hoping: 5000, presence: 500, anything_else: 3000 };
 const MAX_BODY_BYTES = 32 * 1024;
@@ -43,6 +48,7 @@ const MAX_BODY_BYTES = 32 * 1024;
 export default {
     async fetch(request, env) {
         const url = new URL(request.url);
+        if (url.hostname === APPLY_HOST) return moved(url);
         if (url.pathname === '/api/apply') return apply(request, url, env);
 
         // On the apply subdomain the form is the home page. Matching on the "apply."
@@ -59,6 +65,16 @@ export default {
         return env.ASSETS.fetch(request);
     }
 };
+
+// apply.aisum.org after the cutover: every page forwards to the platform, and
+// the old form's endpoint says where applications are made now.
+function moved(url) {
+    if (url.pathname === '/api/apply') {
+        return json(410, { error: `Applications have moved to ${PLATFORM}/apply` });
+    }
+    const target = MOVED_PATHS[url.pathname] ?? '/apply';
+    return Response.redirect(`${PLATFORM}${target}${url.search}`, 302);
+}
 
 function json(status, body) {
     return new Response(JSON.stringify(body), {
