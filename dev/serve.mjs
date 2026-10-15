@@ -60,9 +60,9 @@ async function serveAsset(pathname) {
     });
 }
 
-// Paths the Worker sees before the assets layer: keep in sync with run_worker_first in
-// wrangler.jsonc. Open http://apply.localhost:3000 to see the apply-subdomain behaviour.
-const WORKER_FIRST = ['/', '/apply'];
+// Mirrors run_worker_first: true in wrangler.jsonc: every request goes to the Worker
+// first. Open http://apply.localhost:3000 to see the apply-subdomain behaviour.
+const WORKER_FIRST = true;
 
 env.ASSETS = { fetch: request => serveAsset(new URL(request.url).pathname) };
 
@@ -77,7 +77,7 @@ createServer(async (req, res) => {
 
     let response;
     try {
-        const direct = hasBody || WORKER_FIRST.includes(url.pathname) ? null : assetPath(url.pathname);
+        const direct = hasBody || WORKER_FIRST === true || WORKER_FIRST.includes(url.pathname) ? null : assetPath(url.pathname);
         response = direct ? await serveAsset(url.pathname) : await worker.fetch(request, env);
     } catch (e) {
         console.error(e);

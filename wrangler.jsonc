@@ -7,12 +7,12 @@
   "observability": {
     "enabled": true
   },
-  // Files in ./public are served directly; anything else falls through to src/worker.js.
-  // "/" and "/apply" go to the Worker first because what they serve depends on the
-  // hostname (aisum.org vs apply.aisum.org). dev/serve.mjs mirrors this list.
+  // Every request goes to src/worker.js first: since the cutover to the events
+  // platform, apply.aisum.org forwards everything there, including paths that
+  // still exist as files in ./public. Other hosts fall through to the files.
   "assets": {
     "directory": "./public",
     "binding": "ASSETS",
-    "run_worker_first": ["/", "/apply"]
+    "run_worker_first": true
   }
 }
